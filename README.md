@@ -1,3 +1,3 @@
 # javastudy
 
-<img src="img/qr.jpg">
+<img src="img/qr.png">
