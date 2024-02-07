@@ -117,6 +117,32 @@ public class Ex01 {
 		}
 		 */
 		
+		int num = sc.nextInt();
+		// 역순으로 만들어진 숫자 기억할 변수
+		int result = 0;
+		// 원본을 가공할 변수
+		int tmp = num;
+		
+		for(int i = 0 ; i < 5 ; i++ ) {
+			int namuji = tmp % 10;
+			
+			result = result * 10 + namuji;
+			// 1의 자리를 잘라낸 숫자로 tmp를 다시 셋팅
+			tmp = tmp / 10;
+		}
+		/*
+		System.out.println("num    : " + num);
+		System.out.println("result : " + result);
+		*/
+		
+		String pandan = "회문수";
+		if(num != result) {
+			pandan = "회문수 아님";
+		}
+		
+		System.out.printf("입력받은 다섯자리 숫자 [ %5d ] 를 역순으로 만들면 [ %5d ] 이고 \"%s\" 입니다.",
+					num, result, pandan
+				);
 	}
 
 }

@@ -19,6 +19,29 @@ public class Ex05_stringSplit {
 	public static void main(String[] args) {
 //		System.out.println("Hello".charAt(0));
 		String blackPink = "Black Pink"; // ==> "Pink Black"
+		String result = "";
+		int idx = 0;
+		
+		// 공백문자 위치 확인
+		for(int i = 0 ; i < blackPink.length(); i++ ) {
+			char ch = blackPink.charAt(i);
+			if(ch == ' ') {
+				// 공백문자를 꺼낸경우
+				idx = i;
+				// 찾는 작업을 완료했으므로 반복을 종료
+				break;
+			}
+		}
+		
+		// 문자열 자른다.
+		String front = blackPink.substring(0, idx);
+		String after = blackPink.substring(idx + 1);
+		
+		result = after + " " + front;
+		
+		// 결과 출력
+		System.out.printf("원본 문자열 [ %s ]를 공백을 기준으로 위치를 바꾸면\n" + 
+							"[ %s ] 가 됩니다.", blackPink, result);
 	}
 
 }
