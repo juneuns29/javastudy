@@ -30,6 +30,7 @@ public class Test07_arraycopy {
 		}
 		System.out.println();
 		
+		// 1개의 배열 데이터 수정하고 출력
 		System.out.println("---------------------------------------------");
 		// num의 세번째 데이터를 수정
 		num[2] = 100;
@@ -46,6 +47,7 @@ public class Test07_arraycopy {
 			System.out.print(n + " | ");
 		}
 		System.out.println();
+		
 	}
 
 }
