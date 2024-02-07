@@ -14,6 +14,14 @@ package day08;
 			넓이
 		를 기억시키고 출력하세요.
 		
+		
+	3. 
+		2번에서 완성한 2차원 배열을
+		
+			double[][] dongl = new double[5][3];
+			
+		dongl 배열에 채워넣으세요.
+		
  */
 public class Ex02_circleArray {
 
