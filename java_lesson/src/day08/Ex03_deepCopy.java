@@ -1,5 +1,7 @@
 package day08;
 
+import java.util.Arrays;
+
 public class Ex03_deepCopy {
 
 	public static void main(String[] args) {
@@ -16,6 +18,24 @@ public class Ex03_deepCopy {
 		
 		char[] before;
 		char[] after;
+		int idx = blackpink.indexOf(' ');
+		
+		String tmp = blackpink.substring(0, idx);
+		before = tmp.toCharArray();
+		
+		after = blackpink.substring(idx + 1).toCharArray();
+		
+		char[] result = new char[blackpink.length()];
+		result[after.length] = ' ';
+		
+		System.arraycopy(after, 0, result, 0, after.length);
+		// 앞 문자열 뒤로 보내기
+		System.arraycopy(before, 0, result, after.length + 1, before.length);
+		
+		for(char c : result) {
+			System.out.print(c);
+		}
+		System.out.println();
 	}
 
 }
