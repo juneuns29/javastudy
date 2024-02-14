@@ -30,14 +30,14 @@ public class Test01_ObjectArray {
  */
 	public static void main(String[] args) {
 		// Student에 제니 데이터를 채워보자.
-		Student jennie = new Student("제니", 100, 100, 95); // 한명의 학생 데이터를 채울 준비
+		day09.Student jennie = new day09.Student("제니", 100, 100, 95); // 한명의 학생 데이터를 채울 준비
 //		jennie.name = "제니";
 		// 접근지정자가 생략된 경우이므로 
 		// 같은 클래스 그리고 같은 패키지 내에서만 접근가능하다.
 		
 		System.out.println("이름 : " + jennie.getName());
 		
-		Student kwang = new Student("광섭", 100, 95, 100);
+		day09.Student kwang = new day09.Student("광섭", 100, 95, 100);
 		
 		// 광섭 학생의 이름 꺼내기
 		System.out.println("이름 : " + kwang.getName());

@@ -37,8 +37,20 @@ public class Ex02_OOP {
 		// 여기에 실행할 내용들을 기술...
 		String[] names = {"제니", "리사", "로제", "지수", "광섭"};
 		
-		
 		Student[] stud = new Student[5];
+		// stud 배열은 현재 데이터가 아직 결정되어있지 않은 상태다.
+		// 반복해서 학생들을 채워야 한다.
+		for(int i = 0 ; i < 5 ; i++ ) {
+			int kor = (int)(Math.random()*41 + 60);
+			int eng = (int)(Math.random()*41 + 60);
+			int math = (int)(Math.random()*41 + 60);
+			stud[i] = new Student(names[i], 1, (i + 1), kor, eng, math);
+		}
+		
+		// 출력
+		for(Student s : stud) {
+			s.toPrint();
+		}
 	}
 	
 	public static void main(String[] args) {
