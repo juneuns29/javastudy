@@ -67,7 +67,7 @@ public class Test01_Abstract {
 		
 		// 출력
 		for(Figure f : fig) {
-			System.out.println(f);
+			System.out.println(f.toString());
 		}
 	}
 
