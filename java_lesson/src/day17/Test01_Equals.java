@@ -9,6 +9,29 @@ public class Test01_Equals {
 	public Test01_Equals() {
 		Figure[] fig = new Figure[7];
 		
+		loop:
+		for(int i = 0 ; i < fig.length ; i++ ) {
+			int rad = (int)(Math.random()*10 + 1);
+			
+			Circle c = new Circle(rad);
+			// 중복검사
+			for(int j = 0 ; j < i ; j++ ) {
+				Circle c1 = (Circle) fig[j];
+				if(c.equals(c1)) {
+					// 중복된 원이 이미 추가된 경우
+					i--;
+					continue loop;
+				}
+			}
+			// 이 행을 실행하는 경우는 중복검사를 통과한 경우
+			// 중복된 원이 없는 경우
+			fig[i] = c;
+		}
+		
+		// 정보출력
+		for(Figure f : fig) {
+			System.out.println(f);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -69,15 +92,27 @@ public class Test01_Equals {
 		public void setArround(double arround) {
 			this.arround = arround;
 		}
-		public void setRad(int rad) {
+		public Figure setRad(int rad) {
 			this.rad = rad;
+			
+			return this;
 		}
-		
+		@Override
+		public boolean equals(Object o) {
+			Circle c = (Circle) o;
+			int r = c.getRad();
+			
+			return (rad == r);
+		}
+		@Override
+		public String toString() {
+			return "반지름이 [ " + rad + " ] 인 원";
+		}
 	}
 }
 
 interface Figure {
 	double setArea();
 	int getRad();
-//	boolean equals(Object o);
+	Figure setRad(int rad);
 }
