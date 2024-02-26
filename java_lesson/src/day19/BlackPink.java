@@ -14,7 +14,8 @@ public class BlackPink {
 		this.kor = kor;
 		this.eng = eng;
 		this.math = math;
-		
+		setTotal();
+		setAvg();
 	}
 	public String getName() {
 		return name;
@@ -66,8 +67,9 @@ public class BlackPink {
 	}
 	@Override
 	public String toString() {
-		return "BlackPink [name=" + name + ", kor=" + kor + ", eng=" + eng + ", math=" + math + ", total=" + total
-				+ ", rank=" + rank + ", avg=" + avg + "]";
+		return "*** 이름 : " + name + "\n\t국어 : " + kor + "\n\t영어 : " + eng + 
+				"\n\t수학 : " + math + "\n\t총점 : " + total + "\n\t평균 : " + avg+ 
+				"\n\t순위 : " + rank;
 	}
 	
 }
