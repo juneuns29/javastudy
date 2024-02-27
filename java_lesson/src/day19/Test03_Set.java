@@ -5,6 +5,12 @@ public class Test03_Set {
 
 	public Test03_Set() {
 		HashSet set = new HashSet();
+		/*
+			HashSet에 추가되는 참조형 데이터는
+			중복처리를 하려면
+			equals()와 hashCode()를 오버라이드 해줘야 된다.
+		 */
+		
 		set.add(new Circle(5));
 		set.add(new Circle(10));
 		set.add(new Circle(10));

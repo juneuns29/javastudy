@@ -51,7 +51,6 @@ public class Circle implements Comparable {
 		Circle other = (Circle) o;
 		
 		return (rad == other.getRad());
-		
 	}
 	
 	@Override
@@ -63,7 +62,7 @@ public class Circle implements Comparable {
 	
 	@Override
 	public int hashCode() {
-		int code = super.hashCode();
-		return 1;
+		int code = ((Integer) rad).hashCode();
+		return code;
 	}
 }
