@@ -23,9 +23,23 @@ public class Test02_File {
 		file.mkdir();
 		*/
 		
+		/*
 		// 2. d:\data\a\b 폴더를 만들어보자.
 		File file = new File("D:\\data\\a\\b");
 		file.mkdirs();
+		*/
+		
+		// 3. 
+		File file = new File("D:\\data\\a\\b");
+		file.delete();
+		
+		// 4. 특정 파일의 이름을 다른 이름으로 저장해보자.
+		// 1) 현재 이름과 바꿀이름의 파일을 둘다 File 로 만들어둔다.
+		File oldFile = new File("D:\\data\\a");
+		File newFile = new File("D:\\data\\jennie");
+		
+		// 2) 바꿔준다.==> renameTo()
+		oldFile.renameTo(newFile);
 	}
 
 	public static void main(String[] args) {
