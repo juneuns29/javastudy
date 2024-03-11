@@ -1,10 +1,17 @@
 
-
+-- scott 계정에서 작업
 drop table board;
+drop table gboard;
 drop table member;
 drop table avatar;
+
+conn jennie/12345
+-- jennie 계정에서 작업
 -- avatar 테이블
-DROP TABLE AVATAR;
+drop table reboard;
+drop table member;
+drop table avatar;
+
 CREATE TABLE avatar(
     ano NUMBER(2)
         CONSTRAINT AVT_NO_PK PRIMARY KEY,
@@ -84,6 +91,7 @@ CREATE TABLE member(
         CONSTRAINT MEMB_GEN_CK CHECK(gen IN ('F', 'M'))
         CONSTRAINT MEMB_GEN_NN NOT NULL,
     avatar NUMBER(2)
+        CONSTRAINT MEMB_AVT_FK REFERENCES avatar(ano)
         CONSTRAINT MEMB_AVT_NN NOT NULL,
     isshow CHAR(1) DEFAULT 'Y'
         CONSTRAINT MEMB_SHOW_CK CHECK (isshow IN ('Y', 'N'))
@@ -94,8 +102,7 @@ CREATE TABLE member(
 INSERT INTO
     member(mno, name, id, pw, mail, tel, gen, avatar)
 VALUES(
-    (SELECT NVL(MAX(mno) + 1, 1001) FROM member),
-    '김제니', 'jennie', '12345', 'jennie@human.com', '010-1212-1212', 'F', 15
+    1001, '김제니', 'jennie', '12345', 'jennie@human.com', '010-1212-1212', 'F', 21
 );
 
 INSERT INTO
@@ -107,6 +114,35 @@ VALUES(
     sysdate
 );
 
+
+-- 회원 '쵸파', '리사', '로제', '지수'를 추가하세요.
+INSERT INTO 
+    member(mno, name, id, pw, mail, tel, gen, avatar, joindate, isshow)
+VALUES
+    (mnoseq.NEXTVAL, '쵸파', 'CHOPPA', 12345, 
+        'choppa@human.com', '010-5858-5858', 'M', 11, sysdate, 'Y')
+;
+        
+INSERT INTO 
+    member(mno, name, id, pw, mail, tel, gen, avatar, joindate, isshow)
+VALUES
+    (mnoseq.NEXTVAL, '리사', 'LISA', 12345, 
+        'lisa@human.com', '010-2424-2424', 'F', 22, sysdate, 'Y')
+;
+        
+INSERT INTO 
+    member(mno, name, id, pw, mail, tel, gen, avatar, joindate, isshow)
+VALUES
+    (mnoseq.NEXTVAL, '로제', 'ROSE', 12345, 
+        'rose@human.com', '010-5454-5454', 'F', 22, sysdate, 'Y')
+;
+        
+INSERT INTO 
+    member(mno, name, id, pw, mail, tel, gen, avatar, joindate, isshow)
+VALUES
+    (mnoseq.NEXTVAL, '지수', 'JISOO', 12345, 
+        'jisoo@human.com', '010-2626-2626', 'F', 23, sysdate, 'Y')
+;
 
 CREATE TABLE board(
     bno NUMBER(6)
@@ -128,3 +164,39 @@ CREATE TABLE board(
 );
 
 
+CREATE SEQUENCE brdSeq
+    START WITH 1002
+    MAXVALUE 999999
+    NOCYCLE
+;
+
+-- 게시글 추가
+INSERT INTO
+    board(bno, title, body, writer)
+VALUES(
+    1001, '게시판 오픈',
+    '게시판 오픈하니 많은 이용 부탁드립니다.',
+    1000
+);
+
+
+
+INSERT INTO
+    board(bno, title, body, writer)
+VALUES(
+    brdSeq.NEXTVAL, 
+    '오픈 축하!',
+    '게시판 오픈 축하드립니다.',
+    1001
+);
+
+COMMIT;
+
+-- 게시글의 글번호, 제목, 작성자아이디, 작성일 을 조회하세요.
+SELECT
+    bno 글번호, title 제목, id 아이디, TO_CHAR(wdate, 'YYYY/MM/DD') 작성일
+FROM
+    board, member
+WHERE
+    writer = mno
+;
