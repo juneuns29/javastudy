@@ -2,6 +2,7 @@ package proj.vo;
 
 import java.util.Date;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 public class BoardVO {
 	private int bno, views, mno, ano;
 	private String title, body, id, sdate;
@@ -51,6 +52,12 @@ public class BoardVO {
 	}
 	public String getSdate() {
 		return sdate;
+	}
+	public void setSdate() {
+		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat form2 = new SimpleDateFormat("HH:mm:ss");
+		
+		sdate = form1.format(wdate) + " " + form2.format(wtime);
 	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
