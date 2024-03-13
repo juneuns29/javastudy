@@ -98,4 +98,12 @@ public class BoardDao {
 		// 리스트 반환하고
 		return list;
 	}
+	
+	// 게시글 상세조회 전담 처리함수
+	public BoardVO getDetail(int bno) {
+		BoardVO vo = new BoardVO();
+		
+		
+		return vo;
+	}
 }
