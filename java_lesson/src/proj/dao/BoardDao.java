@@ -99,11 +99,70 @@ public class BoardDao {
 		return list;
 	}
 	
-	// 게시글 상세조회 전담 처리함수
+	// 글 번호를 입력받아서 해당글의 상세정보를 조회하는 데이터베이스 작업 전담 처리함수
 	public BoardVO getDetail(int bno) {
+		// 반환값 변수
 		BoardVO vo = new BoardVO();
-		
-		
+		// 할일
+		// 커넥션 꺼내오고
+		con = db.getCon();
+		// 질의명령 꺼내오고
+		sql = BoardSQL.getSQL(BoardSQL.SEL_DETAIL);
+		// 명령전달도구 만들고
+		pstmt = db.getPstmt(sql, con);
+		try {
+			// 질의명령 완성하고
+			pstmt.setInt(1, bno);
+			
+			// 질의명령 보내고 결과받고
+			rs = pstmt.executeQuery();
+			// 데이터꺼내서 VO에 담고
+			// 작업 진행중 한칸 내리고
+			rs.next();
+			// 데이터 꺼내고
+			vo.setBno(rs.getInt("bno"));
+			vo.setTitle(rs.getString("title"));
+			vo.setBody(rs.getString("body"));
+			vo.setId(rs.getString("id"));
+			vo.setWdate(rs.getDate("wdate"));
+			vo.setWtime(rs.getTime("wdate"));
+			vo.setSdate();
+			vo.setViews(rs.getInt("views"));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.close(rs);
+			db.close(pstmt);
+			db.close(con);
+		}
 		return vo;
 	}
+	
+	// 조회수 증가 데이터베이스 작업 전담 처리함수
+	public int addViews(int bno) {
+		// 반환값 변수
+		int cnt = 0;
+		// 할일
+		// 커넥션
+		con = db.getCon();
+		// 질의명령
+		sql = BoardSQL.getSQL(BoardSQL.ADD_VIEWS);
+		// 명령전달도구
+		pstmt = db.getPstmt(sql, con);
+		try {
+			// 질의명령 완성
+			pstmt.setInt(1, bno);
+			// 질의명령 보내고 결과받고
+			cnt = pstmt.executeUpdate(); // executeUpdate() ==> 질의명령의 결과 변경된 행 수를 반환
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(pstmt);
+			db.close(con);
+		}
+		// 반환값 반환해주고
+		return cnt;
+	}
+	
 }
