@@ -85,15 +85,21 @@ public class BoardController {
 		while(true) {
 			// 글번호 리스트 출력
 			ArrayList<Integer> list = bDao.getBnoList();
-			System.out.println("----------- 글번호 리스트 ----------");
-			System.out.print("|");
-			for(int no : list) {
-				System.out.printf(" %6d |", no);
+			if(list.size() == 0) {
+				System.out.println();
+				System.out.println("***** 작성한 글이 없습니다. *****");
+				System.out.println();
+				return;
+			} else {
+				System.out.println("----------- 글번호 리스트 ----------");
+				System.out.print("|");
+				for(int no : list) {
+					System.out.printf(" %6d |", no);
+				}
+				System.out.println();
+				System.out.println("------------------------------------");
+				System.out.println();
 			}
-			System.out.println();
-			System.out.println("------------------------------------");
-			System.out.println();
-			
 			// 메세지 출력
 			System.out.print("조회할 글 번호를 입력하세요. : ");
 			// 조회할 글 번호 입력받고
@@ -169,15 +175,22 @@ public class BoardController {
 		// 할일
 		// 작성 글번호 리스트 조회
 		ArrayList<Integer> list = bDao.getMineBnoList(mno);
-		// 출력
-		System.out.println();
-		System.out.print("|");
-		for(int no : list) {
-			System.out.printf(" %6d |", no);
-		}
-		System.out.println();
-		System.out.println();
 		
+		if(list.size() == 0) {
+			System.out.println();
+			System.out.println("***** 작성한 글이 없습니다. *****");
+			System.out.println();
+			return;
+		} else {
+			// 출력
+			System.out.println();
+			System.out.print("|");
+			for(int no : list) {
+				System.out.printf(" %6d |", no);
+			}
+			System.out.println();
+			System.out.println();
+		}
 		// 수정 글번호입력
 		// 메세지 출력
 		while(true) {
