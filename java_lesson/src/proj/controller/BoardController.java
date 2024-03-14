@@ -11,12 +11,14 @@ public class BoardController {
 	private BoardDao bDao;
 	private Scanner sc;
 	
+	// 클라이언트 회원번호 변수
+	private int mno = 1000;
+	
 	public BoardController() {
 		bDao = new BoardDao();
 		sc = new Scanner(System.in);
 		
 		menu();
-//		getList();
 	}
 	
 	// 메뉴 출력 함수
@@ -34,13 +36,13 @@ public class BoardController {
 				selectFunc();
 				break;
 			case "u": // 수정기능
-				
+				editBody();
 				break;
 			case "c": // 입력기능
 				
 				break;
 			case "d": // 삭제기능
-				
+				delBoard();
 				break;
 			case "q": // 종료
 				break loop;
@@ -81,6 +83,17 @@ public class BoardController {
 	public void getBnoDetail() {
 		// 할일
 		while(true) {
+			// 글번호 리스트 출력
+			ArrayList<Integer> list = bDao.getBnoList();
+			System.out.println("----------- 글번호 리스트 ----------");
+			System.out.print("|");
+			for(int no : list) {
+				System.out.printf(" %6d |", no);
+			}
+			System.out.println();
+			System.out.println("------------------------------------");
+			System.out.println();
+			
 			// 메세지 출력
 			System.out.print("조회할 글 번호를 입력하세요. : ");
 			// 조회할 글 번호 입력받고
@@ -98,25 +111,34 @@ public class BoardController {
 					// 다시 입력받아서 처리해준다.
 					continue;
 				}
-				BoardVO vo = bDao.getDetail(bno);
 				
-				// 필요한 데이터가 준비되었으니 출력한다.
-				System.out.printf("글번호 : %6d\n" + 
-									"글제목 : %s\n" + 
-									"작성자아이디 : %10s\n" + 
-									"작성일 : %s\n" + 
-									"조회수 : %d\n" + 
-									"글내용 : %s", 
-									vo.getBno(), vo.getTitle(), vo.getId(), vo.getSdate(), 
-									vo.getViews(), vo.getBody());
-				System.out.println();
-				System.out.println();
+				// 내용 꺼내오고...
+				bodyDetail(bno);
 			} catch(Exception e) {
+				sc.nextLine();
 				System.out.println("잘못된 입력입니다. 다시 입력하세요.");
 				continue; // 반복문 다시 실행
 			}
 			break; // 반복문 탈출
 		}
+		
+	}
+	
+	public void bodyDetail(int bno) {
+		BoardVO vo = bDao.getDetail(bno);
+		System.out.println();
+		System.out.println("--------------- 게시글 내용 ---------------");
+		System.out.printf("게시글번호 : %6d\n"
+						+ "글제목 : %s\n"
+						+ "작성자 : %10s\n"
+						+ "작성일 : %s\n"
+						+ "조회수 : %s\n"
+						+ "글내용 : %s"
+						, vo.getBno(), vo.getTitle(), vo.getId(), 
+						vo.getSdate(), vo.getViews(), vo.getBody());
+		System.out.println();
+		System.out.println("-------------------------------------------");
+		System.out.println();
 		
 	}
 	
@@ -138,6 +160,97 @@ public class BoardController {
 			String sdate = vo.getSdate();
 			
 			System.out.printf("%4d ] %10s : %s : %s - %d\n", bno, id, sdate, title, views);
+		}
+	}
+	
+	// 작성글 수정기능
+	public void editBody() {
+		int bno = 0;
+		// 할일
+		// 작성 글번호 리스트 조회
+		ArrayList<Integer> list = bDao.getMineBnoList(mno);
+		// 출력
+		System.out.println();
+		System.out.print("|");
+		for(int no : list) {
+			System.out.printf(" %6d |", no);
+		}
+		System.out.println();
+		System.out.println();
+		
+		// 수정 글번호입력
+		// 메세지 출력
+		while(true) {
+			System.out.print("수정할 글번호를 입력 : ");
+			try {
+				bno = Integer.parseInt(sc.nextLine());
+			} catch(Exception e) {
+				// 여기를 실행하는 경우는 정수를 입력해주지 않은 경우...
+				// 입력을 다시받는다.
+				System.out.println("잘못된 입력입니다.");
+				continue;
+			}
+			
+			break;
+		}
+		// 수정글 원본 내용 출력
+		String body = bDao.getBody(bno);
+		System.out.println();
+		System.out.println("############### [ " + bno + " ] 글내용 ###############");
+		System.out.println();
+		System.out.println(body);
+		System.out.println();
+		// 수정내용을 입력
+		System.out.println("------------------------------------");
+		// 메세지 출력
+		System.out.println("수정 내용 입력 :");
+		// 입력받고
+		String rebody = sc.nextLine();
+		// 입력된 내용 데이터베이스에 입력
+		int cnt = bDao.editBody(bno, rebody);
+		// 결과 출력
+		if(cnt == 1) {
+			bodyDetail(bno);
+		} else {
+			System.out.println("#### 수정작업이 실패했습니다. ###");
+		}
+		
+	}
+	
+	// 게시글 삭제 요청 전담 처리함수
+	public void delBoard() {
+		// 할일
+		// 내가 작성한 글 번호 리스트 출력
+		ArrayList<Integer> list = bDao.getMineBnoList(mno);
+		// 출력
+		System.out.println();
+		System.out.print("|");
+		for(int no : list) {
+			System.out.printf(" %6d |", no);
+		}
+		System.out.println();
+		System.out.println();
+		
+		// 삭제글번호 입력받고
+		int bno = 0;
+		// 메세지
+		while(true) {
+			System.out.print("삭제할 글 번호 입력 : ");
+			try {
+				bno = Integer.parseInt(sc.nextLine());
+			} catch(Exception e) {
+				System.out.println("# 잘못된 입력입니다.");
+				continue;
+			}
+			break;
+		}
+		// 글 삭제하고
+		int cnt = bDao.delBno(bno);
+		// ==> 작업이 성공하면 1, 실패하면 0
+		
+		// 결과 출력
+		if(cnt != 1) {
+			System.out.println("#### 삭제작업이 실패했습니다. ####");
 		}
 	}
 	

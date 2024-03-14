@@ -36,6 +36,40 @@ public class BoardDao {
 		// 이제 오라클 드라이버 로딩은 끝난 상태가 된다.
 	}
 	
+	// 게시글 번호 리스트 조회 전담 처리함수
+	public ArrayList<Integer> getBnoList(){
+		// 할일
+		// 반환값 변수 만들고
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		// 커넥션 가져오고
+		con = db.getCon();
+		// 질의명령 가져오고
+		sql = BoardSQL.getSQL(BoardSQL.SEL_BNO_LIST);
+		// 명령전달도구 가져오고
+		stmt = db.getStmt(con);
+		try {
+			// 명령전달도구에 질의명령 실어서 보내고 결과받고
+			rs = stmt.executeQuery(sql);
+			// 하나씩 거내서 리스트에 담고
+			// 질의명령 실행의 결과가 몇행이 만들어졌는지 알수 없으므로 반복해서 처리
+			while(rs.next()) {
+				// 글번호 꺼내고
+				int bno = rs.getInt("bno");
+				// 리스트에 채우고
+				list.add(bno);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(rs);
+			db.close(stmt);
+			db.close(con);
+		}
+		
+		// 리스트 반환해주고
+		return list;
+	}
+	
 	// 게시글 리스트 조회 전담 처리함수
 	public ArrayList<BoardVO> getAllList(){
 		// 질의명령이 이미 완성이 되어있으므로 
@@ -52,7 +86,7 @@ public class BoardDao {
 		con = db.getCon();
 		// 3. 질의명령 꺼내오고
 		sql = BoardSQL.getSQL(BoardSQL.SEL_ALL_LIST);
-		System.out.println("########### SQL : " + sql);
+//		System.out.println("########### SQL : " + sql);
 		// 4. 명령 전달도구 가져오고
 		stmt = db.getStmt(con);
 		try {
@@ -97,6 +131,103 @@ public class BoardDao {
 		
 		// 리스트 반환하고
 		return list;
+	}
+	
+	// 내가 작성한 글번호리스트 조회 전담 처리함수
+	public ArrayList<Integer> getMineBnoList(int mno){
+		// 반환값 변수
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		// 위에 만든 리스트에 내가 작성한 글번호들을 채워서 반환해주면 된다.
+		// 할일
+		// 커넥션 꺼내오고
+		con = db.getCon();
+		// 질의명령 가져오고
+		sql = BoardSQL.getSQL(BoardSQL.SEL_MIBNO_LIST);
+		// 명령전달도구 꺼내오고
+		pstmt = db.getPstmt(sql, con);
+		
+		try {
+			// 질의명령 완성하고
+			pstmt.setInt(1, mno);
+			// 명령전달도구에 기억된 질의명령 보내고 결과 받고
+			rs = pstmt.executeQuery();
+			// 꺼내서
+			while(rs.next()) {
+				int bno = rs.getInt("bno");
+				// 리스트에 담고
+				list.add(bno);
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(rs);
+			db.close(pstmt);
+			db.close(con);
+		}
+		// 리스트 반환
+		return list;
+	}
+	
+	// 게시글 본문 조회 전담 처리함수
+	public String getBody(int bno) {
+		// 반환값 변수
+		String body = "";
+		// 할일
+		// 커넥션 꺼내오고
+		con = db.getCon();
+		// 질의명령 가져오고
+		sql = BoardSQL.getSQL(BoardSQL.SEL_BNO_BODY);
+		// 명령전달도구 준비하고
+		pstmt = db.getPstmt(sql, con);
+		
+		try {
+			// 질의명령 완성하고
+			pstmt.setInt(1, bno);
+			// 질의명령 보내고 결과받고
+			rs = pstmt.executeQuery();
+			// 꺼내서 저장하고
+			// 결과가 한행만 조회되므로
+			rs.next();
+			body = rs.getString("body");
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(rs);
+			db.close(pstmt);
+			db.close(con);
+		}
+		
+		// 반환해주고
+		return body;
+	}
+	
+	// 게시글 본문 수정 데이터베이스작업 전담 처리함수
+	public int editBody(int bno, String body) {
+		// 반환값 변수 - 변경된 행의 수
+		int cnt = 0;
+		// 할일
+		// 커넥션 꺼내오고
+		con = db.getCon();
+		// 질의명령 가져오고
+		sql = BoardSQL.getSQL(BoardSQL.EDIT_BODY);
+		// 명령전달도구 꺼내오고
+		pstmt = db.getPstmt(sql, con);
+		try {
+			// 질의명령 완성하고
+			pstmt.setString(1, body);
+			pstmt.setInt(2, bno);
+			// 질의명령보내고 결과받고
+			cnt = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(pstmt);
+			db.close(con);
+		}
+		
+		return cnt;
 	}
 	
 	// 글 번호를 입력받아서 해당글의 상세정보를 조회하는 데이터베이스 작업 전담 처리함수
@@ -162,6 +293,32 @@ public class BoardDao {
 			db.close(con);
 		}
 		// 반환값 반환해주고
+		return cnt;
+	}
+	
+	// 게시글 삭제 전담 처리함수
+	public int delBno(int bno) {
+		// 반환값 변수
+		int cnt = 0;
+		// 할일
+		// 커넥션 꺼내오고
+		con = db.getCon();
+		// 질의명령 가져오고
+		sql = BoardSQL.getSQL(BoardSQL.DEL_BNO);
+		// 명령전달도구 준비하고
+		pstmt = db.getPstmt(sql, con);
+		try {
+			// 질의명령 완성하고
+			pstmt.setInt(1, bno);
+			// 질의명령 보내고 결과받고
+			cnt = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(pstmt);
+			db.close(con);
+		}
+		// 반환해주고
 		return cnt;
 	}
 	
