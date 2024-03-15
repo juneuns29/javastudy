@@ -5,6 +5,7 @@ package proj.vo;
  */
 import java.util.Date;
 import java.sql.*;
+import java.text.*;
 public class MemberVO {
 	private int mno, ano;
 	private String name, id, pw, mail, tel, gen, savename, sdate;
@@ -68,6 +69,12 @@ public class MemberVO {
 	public String getSdate() {
 		return sdate;
 	}
+	public void setSdate() {
+		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd ");
+		SimpleDateFormat form2 = new SimpleDateFormat("HH:mm:ss");
+		
+		sdate = form1.format(jDate) + form2.format(jTime);
+	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
 	}
@@ -82,5 +89,6 @@ public class MemberVO {
 	}
 	public void setjTime(Time jTime) {
 		this.jTime = jTime;
+		setSdate();
 	}
 }

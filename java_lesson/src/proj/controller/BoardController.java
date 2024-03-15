@@ -12,7 +12,7 @@ public class BoardController {
 	private Scanner sc;
 	
 	// 클라이언트 회원번호 변수
-	private int mno = 1000;
+	private int mno = 1022;
 	
 	public BoardController() {
 		bDao = new BoardDao();
@@ -39,7 +39,7 @@ public class BoardController {
 				editBody();
 				break;
 			case "c": // 입력기능
-				
+				writeBoard();
 				break;
 			case "d": // 삭제기능
 				delBoard();
@@ -89,7 +89,7 @@ public class BoardController {
 				System.out.println();
 				System.out.println("***** 작성한 글이 없습니다. *****");
 				System.out.println();
-				return;
+				return; // 실행되는 함수를 즉시 종료하세요.
 			} else {
 				System.out.println("----------- 글번호 리스트 ----------");
 				System.out.print("|");
@@ -195,8 +195,13 @@ public class BoardController {
 		// 메세지 출력
 		while(true) {
 			System.out.print("수정할 글번호를 입력 : ");
+			String tmp = sc.nextLine();
 			try {
-				bno = Integer.parseInt(sc.nextLine());
+				if(tmp.equals("q")) {
+					return;
+				} else {
+					bno = Integer.parseInt(tmp);
+				}
 			} catch(Exception e) {
 				// 여기를 실행하는 경우는 정수를 입력해주지 않은 경우...
 				// 입력을 다시받는다.
@@ -265,6 +270,48 @@ public class BoardController {
 		if(cnt != 1) {
 			System.out.println("#### 삭제작업이 실패했습니다. ####");
 		}
+	}
+	
+	// 게시글 작성 기능 전담 함수
+	public void writeBoard() {
+		// 할일
+		// 변수 준비
+		String title = "";
+		String body= "";
+		
+		while(true) {
+			// 1. 제목 입력 메세지
+			System.out.print("제목 입력 : ");
+			// 2. 제목 입력받고
+			title = sc.nextLine();
+			if(title == null || title.length() == 0) {
+				continue;
+			}
+			break;
+		}
+		
+		while(true){
+			// 3. 본문 입력 메세지
+			System.out.print("내용 입력 : ");
+			// 4. 본문 입력 
+			body = sc.nextLine();
+			if(body == null || body.length() == 0) {
+				continue;
+			}
+			
+			break;
+		}
+		// 5. 데이터베이스 작업하고 결과 받고
+		int cnt = bDao.addBoard(title, body, mno);
+		// 6. 결과 출력
+		if(cnt == 1) {
+			// 입력작업에 성공한 경우
+			System.out.println("*** 게시글 등록 성공 ***");
+		} else {
+			// 실패한 경우
+			System.out.println("### 게시글 등록 실패 ###");
+		}
+		// 7. 종료
 	}
 	
 	public static void main(String[] args) {
